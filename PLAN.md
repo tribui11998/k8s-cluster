@@ -13,4 +13,11 @@ Kubernetes cluster operation
     Deploy app, expose services
     Install metrics-server, monitoring stack (Grafana/Prometheus)
     Setup service mesh stack (Kiali/Istio)
+    Backup & DR: velero
+    ELK stack
+    Ingress controller, Gateway API, certificates
     Operation tools: k9s
+Nodes management
+    CIS, update, ntp sync, auditd, SELinux
+    Node exporter, Fail2ban, log rotation
+    Bastion host, NAT gateway outbound
