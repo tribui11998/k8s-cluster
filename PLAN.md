@@ -9,3 +9,7 @@ Packer: build image based on Config + Ansible
 Build Nodes, use Terraform
     Master: init cluster as control plane, install CNI plugin, Firewalls
     Worker: join cluster, Firewall
+Kubernetes cluster operation
+    Deploy app, expose services
+    Install metrics-server, monitoring stack (Grafana/Prometheus)
+    Setup service mesh stack (Kiali/Istio)
