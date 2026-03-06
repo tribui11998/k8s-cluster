@@ -36,9 +36,9 @@ gcloud services enable \
   iam.googleapis.com \
   cloudresourcemanager.googleapis.com
 
-https://console.cloud.google.com/welcome?project=user-cifrgcupmaah
+https://console.cloud.google.com/welcome?project=user-aaetvilwrmde
 
-project=user-cifrgcupmaah
+project=user-aaetvilwrmde
 user=tribui2026@gmail.com
 gcloud projects add-iam-policy-binding $project \
   --member="user:$user" \
@@ -97,7 +97,7 @@ kubeadm join 10.0.1.3:6443 --token 7aa6i0.gdj41ofvzdsxykpy \
 
 kubectl label node my-vm-2.asia-southeast1-b.c.user-cifrgcupmaah.internal node-role.kubernetes.io/worker=worker
 
-``
+```
 
 Deploy demo-app
 
@@ -191,4 +191,27 @@ spec:
 ```
 kubectl get pods -n demo
 
+```
+
+Build image with Packer
+
+```
+# Init packer
+cd packer/
+packer init .
+
+# Validate
+packer validate -var "project_id=$project" .
+
+# Build
+packer build -var "project_id=$project" .
+
+# Build với custom variables
+packer build \
+  -var "project_id=$project" \
+  -var "zone=asia-southeast1-a" \
+  -var "k8s_version=1.31" \
+  -var "network=my-vpc" \
+  -var "subnet=my-subnet" \
+  .
 ```
