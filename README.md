@@ -65,3 +65,10 @@ terraform plan
 terraform apply --auto-approve
 terraform destroy
 ```
+
+Login VM
+
+```
+gcloud compute ssh my-vm --zone=asia-southeast1-a --project=$project
+
+```

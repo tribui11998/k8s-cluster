@@ -44,13 +44,13 @@ resource "google_compute_firewall" "ssh" {
 # VM Instance
 resource "google_compute_instance" "vm" {
   name         = "my-vm"
-  machine_type = "e2-medium"  # 2 vCPU, 4GB RAM
+  machine_type = "e2-custom-4-8192"  # 4 vCPU, 8GB RAM
   zone         = "asia-southeast1-a"
 
   boot_disk {
     initialize_params {
       image = "ubuntu-os-cloud/ubuntu-2404-lts-amd64"
-      size  = 20  # GB
+      size  = 200  # GB
       type  = "pd-balanced"
     }
   }
@@ -71,6 +71,8 @@ resource "google_compute_instance" "vm" {
   labels = {
     environment = "dev"
   }
+
+  allow_stopping_for_update = true
 }
 
 # Output

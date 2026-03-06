@@ -29,4 +29,5 @@ terraform.rc
 # Plan files
 *.tfplan
 
+.terraform
 .terraform.*
