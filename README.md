@@ -56,3 +56,12 @@ gcloud auth application-default login
 
 gcloud config set project $project
 ```
+
+Run terraform
+
+```
+terraform init
+terraform plan
+terraform apply --auto-approve
+terraform destroy
+```
