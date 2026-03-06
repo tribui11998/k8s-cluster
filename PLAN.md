@@ -13,3 +13,4 @@ Kubernetes cluster operation
     Deploy app, expose services
     Install metrics-server, monitoring stack (Grafana/Prometheus)
     Setup service mesh stack (Kiali/Istio)
+    Operation tools: k9s
