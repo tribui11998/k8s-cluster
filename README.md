@@ -71,4 +71,124 @@ Login VM
 ```
 gcloud compute ssh my-vm --zone=asia-southeast1-a --project=$project
 
+
+gcloud compute scp localfile.txt my-vm:~/remotefile.txt --zone=asia-southeast1-a --project=$project
+gcloud compute scp --recurse local-folder my-vm:~/remote-folder --zone=asia-southeast1-a --project=$project
+```
+
+Join cluster
+```
+sudo kubeadm join 10.0.1.3:6443 --token y69pby.a7uarjo319byut1f --discovery-token-ca-cert-hash sha256:99c6a044dc98906cda6df71b1f39f60c0dde9df89f9d482390b89dce2dea217b 
+
+You can now join any number of control-plane nodes running the following command on each as root:
+
+  kubeadm join 10.0.1.3:6443 --token 7aa6i0.gdj41ofvzdsxykpy \
+        --discovery-token-ca-cert-hash sha256:99c6a044dc98906cda6df71b1f39f60c0dde9df89f9d482390b89dce2dea217b \
+        --control-plane --certificate-key c99286b6b2dde1940c8720ce5b7a0b4d3b27799f999ef3169669d659e69b70c6
+
+Please note that the certificate-key gives access to cluster sensitive data, keep it secret!
+As a safeguard, uploaded-certs will be deleted in two hours; If necessary, you can use
+"kubeadm init phase upload-certs --upload-certs" to reload certs afterward.
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 10.0.1.3:6443 --token 7aa6i0.gdj41ofvzdsxykpy \
+        --discovery-token-ca-cert-hash sha256:99c6a044dc98906cda6df71b1f39f60c0dde9df89f9d482390b89dce2dea217b
+
+kubectl label node my-vm-2.asia-southeast1-b.c.user-cifrgcupmaah.internal node-role.kubernetes.io/worker=worker
+
+``
+
+Deploy demo-app
+
+```
+# 1. namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo
+
+---
+# 2. deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-demo
+  namespace: demo
+  labels:
+    app: nginx-demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-demo
+  template:
+    metadata:
+      labels:
+        app: nginx-demo
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27-alpine
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5
+
+---
+# 3. configmap.yaml - Custom HTML page
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-html
+  namespace: demo
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head><title>K8s Demo</title></head>
+    <body style="font-family:sans-serif; text-align:center; padding:50px;">
+      <h1>Hello from Kubernetes!</h1>
+      <p>Nginx is running on K8s cluster</p>
+      <p>Pod: <!-- hostname will show pod name --></p>
+    </body>
+    </html>
+
+---
+# 4. service.yaml - Expose qua NodePort
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-demo
+  namespace: demo
+spec:
+  type: NodePort
+  selector:
+    app: nginx-demo
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080
+```
+
+```
+kubectl get pods -n demo
+
 ```
