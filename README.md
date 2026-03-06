@@ -20,3 +20,39 @@ echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.clou
 
 sudo apt-get update && sudo apt-get install google-cloud-cli ansible terraform
 ```
+
+Setup Google cloud
+Create project, get project ID
+Enable APIs serivces
+
+```
+https://learning.oreilly.com/interactive-lab/google-cloud-sandbox/9781098162948/
+
+
+
+gcloud services enable \
+  compute.googleapis.com \
+  storage.googleapis.com \
+  iam.googleapis.com \
+  cloudresourcemanager.googleapis.com
+
+https://console.cloud.google.com/welcome?project=user-cifrgcupmaah
+
+project=user-cifrgcupmaah
+user=tribui2026@gmail.com
+gcloud projects add-iam-policy-binding $project \
+  --member="user:$user" \
+  --role="roles/editor"
+gcloud projects add-iam-policy-binding $project \
+  --member="user:$user" \
+  --role="roles/container.admin"
+```
+
+Login gcloud command
+
+```
+gcloud auth login
+gcloud auth application-default login
+
+gcloud config set project $project
+```
